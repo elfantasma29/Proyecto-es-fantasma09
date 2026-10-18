@@ -1,0 +1,48 @@
+plugins {
+    id 'com.android.application'
+    id 'com.chaquo.python'
+}
+
+android {
+    namespace 'com.fantasma.lector'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.fantasma.lector"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "0.1-prueba-chaquopy"
+
+        ndk {
+            abiFilters "arm64-v8a"
+        }
+
+        python {
+            buildPython "python3"
+            pip {
+                // yt-dlp: tiene código nativo en sus dependencias (brotli,
+                // pycryptodomex), así que va empaquetado dentro del APK,
+                // no como descarga desde la tienda de bibliotecas.
+                install "yt-dlp"
+                if (project.hasProperty("pkgTest")) {
+                    install project.property("pkgTest")
+                }
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'dev.ffmpegkit-maintained:ffmpeg-kit-https:8.1.9'
+}
